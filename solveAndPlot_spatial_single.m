@@ -6,7 +6,7 @@ c=100;
 k=1;
 f=@(x)x.^k;
 epsilon=1e-5;
-n={[2^7+1];[2^7]};
+n={[2^9+1];[2^8]};
 w={[];[]};
 meshType='boxSegUniform';
 basis='Linear';
@@ -33,11 +33,7 @@ u=H\vecf;
 %% interpolant
 % get node coordinates
 N=mesh0.Nnodes;
-xList=zeros(N,1);yList=zeros(N,1);
-for i=1:N
-    xList(i)=mesh0.nodes(i).x;
-    yList(i)=mesh0.nodes(i).y;
-end
+xList=mesh0.nodes.x;yList=mesh0.nodes.y;
 
 % prepare solution data
 Ninner=length(u);

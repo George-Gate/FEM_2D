@@ -19,6 +19,26 @@ function mesh = makeMesh( type,n,varargin )
 %                  i=3,4 describe the y axis division of [-1,0] and [0,1].
 %           [Usage] mesh = makeMesh( 'LshapeSegUniform', n, w );
 %
+%  [About the return struct mesh]
+%  mesh
+%     .Nnodes, .Nesges, .Nsurfaces: the number of nodes, edges and surfaces in the mesh
+%     .nodes: node information
+%          .x(i)             x coordinate of node i
+%          .y(i)             y coordinate of node i
+%          .s(1:4,i)         the id of adjacent surfaces of node i
+%          .onBoundary(i)    to indicate whether node i is on the boundary
+%     .edges: edge information
+%          .n(1:2,i)         the id of endpoint nodes of edge i
+%          .s(1:2,i)         the id of adjacent surfaces of edge i
+%          .onBoundary(i)    to indicate whether edge i is on the boundary
+%     .surfaces: surface information
+%          .n(1:4,i)         the id of corner nodes of surface i
+%          .e(1:4,i)         the id of adjacent edge of surface i
+%          .x(1:2,i)         x coordinates of surface i
+%          .y(1:2,i)         y coordinates of surface i
+%          .hx(i)            width of surface i along x axis
+%          .hy(i)            width of surface i along y axis
+
 
 switch type
     case 'boxSegUniform'
