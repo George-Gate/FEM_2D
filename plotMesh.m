@@ -2,69 +2,65 @@ figure();
 displayText=1;
 displayRelation=0;
 %% plot node
-posInner=zeros(mesh0.Nnodes,3);
-posBorder=zeros(mesh0.Nnodes,3);
-tI=1;tB=1;
-for i=1:mesh0.Nnodes
-    if (mesh0.nodes(i).onBoundary)
-        color='c^';
-    else
-        color='bo';
-    end
-    p=mesh0.nodes(i);
-    x=p.x;
-    y=p.y;
-    scatter(x,y,color);hold on;
-    if displayText
-        % Disp the id of node
-        text(x,y,num2str(i),'VerticalAlignment','bottom','color','r');
-        if displayRelation
-            % Disp nodes{i}.s
-            text(x,y,['     ',num2str(p.s(1))],'HorizontalAlignment','left','VerticalAlignment','bottom','color','r');
-            text(x,y,[num2str(p.s(2)),'     '],'HorizontalAlignment','right','VerticalAlignment','bottom','color','r');
-            text(x,y,[num2str(p.s(3)),'     '],'HorizontalAlignment','right','VerticalAlignment','top','color','r');
-            text(x,y,['     ',num2str(p.s(4))],'HorizontalAlignment','left','VerticalAlignment','top','color','r');
-        end
+idOnB=find(mesh0.nodes.onBoundary == 1);
+idOffB=find(mesh0.nodes.onBoundary == 0);
+x=mesh0.nodes.x;
+y=mesh0.nodes.y;
+scatter(x(idOnB ),y(idOnB ),'c^');hold on;
+scatter(x(idOffB),y(idOffB),'bo');
+
+if displayText
+    % Disp the id of node
+    text(x,y,num2str((1:mesh0.Nnodes)'),'VerticalAlignment','bottom','color','r');
+    if displayRelation
+        % Disp nodes.s
+        text(x,y,num2str(mesh0.nodes.s(1,:)','\\qquad %i'),'HorizontalAlignment','left','VerticalAlignment','bottom','color','r','interpreter','latex');
+        text(x,y,num2str(mesh0.nodes.s(2,:)','%i \\quad'),'HorizontalAlignment','right','VerticalAlignment','bottom','color','r','interpreter','latex');
+        text(x,y,num2str(mesh0.nodes.s(3,:)','%i \\quad'),'HorizontalAlignment','right','VerticalAlignment','top','color','r','interpreter','latex');
+        text(x,y,num2str(mesh0.nodes.s(4,:)','\\quad %i'),'HorizontalAlignment','left','VerticalAlignment','top','color','r','interpreter','latex');
     end
 end
-
 
 %% plot edge
-for i=1:mesh0.Nedges
-    if (mesh0.edges(i).onBoundary)
-        color='c';
+idOnB=find(mesh0.edges.onBoundary == 1);
+idOffB=find(mesh0.edges.onBoundary == 0);
+clear x y;
+x(1,:)=mesh0.nodes.x(mesh0.edges.n(1,:))';y(1,:)=mesh0.nodes.y(mesh0.edges.n(1,:))';
+x(2,:)=mesh0.nodes.x(mesh0.edges.n(2,:))';y(2,:)=mesh0.nodes.y(mesh0.edges.n(2,:))';
+line(x(:,idOnB ),y(:,idOnB ),'color','c');
+line(x(:,idOffB),y(:,idOffB),'color','b');
+
+if displayText
+    if displayRelation
+        % Disp the id of edge and adjacent surfaces
+        text(sum(x,1)'/2,sum(y,1)'/2,num2str([mesh0.edges.s(1,:)',(1:mesh0.Nedges)',mesh0.edges.s(2,:)']),'color','b','HorizontalAlignment','center');
     else
-        color='b';
-    end
-    n=mesh0.edges(i).n;
-    x=[mesh0.nodes(n(1)).x,mesh0.nodes(n(2)).x];
-    y=[mesh0.nodes(n(1)).y,mesh0.nodes(n(2)).y];
-    line(x,y,'color',color);
-    if displayText
-        if displayRelation
-            % Disp the id of edge and adjacent surfaces
-            text(sum(x)/2,sum(y)/2,num2str([mesh0.edges(i).s(1),i,mesh0.edges(i).s(2)]),'color','b','HorizontalAlignment','center');
-        else
-            % Disp the id of edge
-            text(sum(x)/2,sum(y)/2,num2str(i),'color','b','HorizontalAlignment','center');
-        end
+        % Disp the id of edge
+        text(sum(x,1)'/2,sum(y,1)'/2,num2str((1:mesh0.Nedges)'),'color','b','HorizontalAlignment','center');
     end
 end
+
+
 
 %% plot surface
+
 if displayText
-    for i=1:mesh0.Nsurfaces
-        s=mesh0.surfaces(i);
-        x=sum(s.x)/2;
-        y=sum(s.y)/2;
-        if displayRelation
-            text(x,y,num2str([s.n(2),s.e(1),s.n(1);s.e(2),i,s.e(4);s.n(3),s.e(3),s.n(4)]),'color','k');
-        else
-            text(x,y,num2str(i),'color','k');
+    if displayRelation
+        for i=1:mesh0.Nsurfaces
+            x=sum(mesh0.surfaces.x(:,i))/2;
+            y=sum(mesh0.surfaces.y(:,i))/2;
+            text(x,y,num2str([mesh0.surfaces.n(2,i),mesh0.surfaces.e(1,i),mesh0.surfaces.n(1,i);  ...
+                              mesh0.surfaces.e(2,i),        i            ,mesh0.surfaces.e(4,i);       ...
+                              mesh0.surfaces.n(3,i),mesh0.surfaces.e(3,i),mesh0.surfaces.n(4,i)]),'color','k','HorizontalAlignment','center');
         end
+    else
+        x=mesh0.surfaces.x;
+        y=mesh0.surfaces.y;
+        text(sum(x,1)'/2,sum(y,1)'/2,num2str((1:mesh0.Nsurfaces)'),'color','k','HorizontalAlignment','center');
     end
 end
 
+clear x y;
 %%
 set(gca,'xTick',[0 1],'xTickMode','manual');
 set(gca,'yTick',[0 1],'yTickMode','manual');
