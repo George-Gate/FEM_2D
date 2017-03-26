@@ -1,5 +1,5 @@
 <deployment-project plugin="plugin.coder" plugin-version="R2016a">
-  <configuration build-checksum="663364155" file="D:\文档\课件\研究生[CSRC]\2017-02 有限元方法及其应用[张智民, Martin Stynes]\2017-03-21 Project 2_2D FEM\program_2D\getCoeffs2D_Linear.prj" location="D:\文档\课件\研究生[CSRC]\2017-02 有限元方法及其应用[张智民, Martin Stynes]\2017-03-21 Project 2_2D FEM\program_2D" name="getCoeffs2D_Linear" target="target.unifiedcoder" target-name="MATLAB Coder">
+  <configuration build-checksum="938686123" file="D:\文档\学校\研究生[CSRC]\课程\2017-02 有限元方法及其应用[张智民, Martin Stynes]\2017-03-21 Project 2_2D FEM\program_2D\getCoeffs2D_Linear.prj" location="D:\文档\学校\研究生[CSRC]\课程\2017-02 有限元方法及其应用[张智民, Martin Stynes]\2017-03-21 Project 2_2D FEM\program_2D" name="getCoeffs2D_Linear" target="target.unifiedcoder" target-name="MATLAB Coder">
     <profile key="profile.mex">
       <param.BuiltInstrumentedMex>false</param.BuiltInstrumentedMex>
       <param.RanInstrumentedMex>false</param.RanInstrumentedMex>
@@ -118,25 +118,25 @@
       <param.SpecifiedBuildFolder />
       <param.SearchPaths />
       <param.SaturateOnIntegerOverflow>true</param.SaturateOnIntegerOverflow>
-      <param.PurelyIntegerCode>false</param.PurelyIntegerCode>
-      <param.SupportNonFinite>true</param.SupportNonFinite>
+      <param.PurelyIntegerCode />
+      <param.SupportNonFinite />
       <param.EnableVariableSizing>true</param.EnableVariableSizing>
       <param.DynamicMemoryAllocation>option.DynamicMemoryAllocation.Threshold</param.DynamicMemoryAllocation>
       <param.DynamicMemoryAllocationThreshold>65536</param.DynamicMemoryAllocationThreshold>
       <param.StackUsageMax>200000</param.StackUsageMax>
-      <param.MultiInstanceCode>false</param.MultiInstanceCode>
+      <param.MultiInstanceCode />
       <param.FilePartitionMethod>option.FilePartitionMethod.MapMFileToCFile</param.FilePartitionMethod>
       <param.GenerateComments>true</param.GenerateComments>
-      <param.CommentStyle>option.CommentStyle.Auto</param.CommentStyle>
+      <param.CommentStyle />
       <param.MATLABSourceComments>false</param.MATLABSourceComments>
-      <param.MATLABFcnDesc>true</param.MATLABFcnDesc>
-      <param.DataTypeReplacement>option.DataTypeReplacement.CBuiltIn</param.DataTypeReplacement>
-      <param.ConvertIfToSwitch>false</param.ConvertIfToSwitch>
-      <param.PreserveExternInFcnDecls>true</param.PreserveExternInFcnDecls>
-      <param.EnableSignedLeftShifts>true</param.EnableSignedLeftShifts>
-      <param.EnableSignedRightShifts>true</param.EnableSignedRightShifts>
-      <param.ParenthesesLevel>option.ParenthesesLevel.Nominal</param.ParenthesesLevel>
-      <param.MaxIdLength>31</param.MaxIdLength>
+      <param.MATLABFcnDesc />
+      <param.DataTypeReplacement />
+      <param.ConvertIfToSwitch />
+      <param.PreserveExternInFcnDecls />
+      <param.EnableSignedLeftShifts />
+      <param.EnableSignedRightShifts />
+      <param.ParenthesesLevel />
+      <param.MaxIdLength />
       <param.CustomSymbolStrGlobalVar>$M$N</param.CustomSymbolStrGlobalVar>
       <param.CustomSymbolStrType>$M$N</param.CustomSymbolStrType>
       <param.CustomSymbolStrField>$M$N</param.CustomSymbolStrField>
@@ -144,22 +144,22 @@
       <param.CustomSymbolStrTmpVar>$M$N</param.CustomSymbolStrTmpVar>
       <param.CustomSymbolStrMacro>$M$N</param.CustomSymbolStrMacro>
       <param.CustomSymbolStrEMXArray>emxArray_$M$N</param.CustomSymbolStrEMXArray>
-      <param.CustomSymbolStrEMXArrayFcn>emx$M$N</param.CustomSymbolStrEMXArrayFcn>
+      <param.CustomSymbolStrEMXArrayFcn />
       <param.ReservedNameArray />
-      <param.RuntimeChecks>false</param.RuntimeChecks>
-      <param.Verbose>false</param.Verbose>
+      <param.RuntimeChecks />
+      <param.Verbose />
       <param.GenerateReport>true</param.GenerateReport>
-      <param.GenerateCodeMetricsReport>true</param.GenerateCodeMetricsReport>
-      <param.GenerateCodeReplacementReport>false</param.GenerateCodeReplacementReport>
-      <param.HighlightPotentialDataTypeIssues>false</param.HighlightPotentialDataTypeIssues>
+      <param.GenerateCodeMetricsReport />
+      <param.GenerateCodeReplacementReport />
+      <param.HighlightPotentialDataTypeIssues />
       <param.LaunchReport>false</param.LaunchReport>
-      <param.SILDebugging>false</param.SILDebugging>
-      <param.CodeExecutionProfiling>false</param.CodeExecutionProfiling>
+      <param.SILDebugging />
+      <param.CodeExecutionProfiling />
       <param.DefaultTestFile />
       <param.MergeInstrumentationResults>false</param.MergeInstrumentationResults>
       <param.RanPilSilVerification>false</param.RanPilSilVerification>
       <param.VerificationMode>option.VerificationMode.None</param.VerificationMode>
-      <param.VerificationStatus>option.VerificationStatus.Inactive</param.VerificationStatus>
+      <param.VerificationStatus />
       <param.CustomSourceCode />
       <param.CustomHeaderCode />
       <param.CustomInitializer />
@@ -168,12 +168,12 @@
       <param.CustomSource />
       <param.CustomLibrary />
       <param.PostCodeGenCommand />
-      <param.TargetLangStandard>C++03 (ISO)</param.TargetLangStandard>
-      <param.CodeReplacementLibrary>None</param.CodeReplacementLibrary>
-      <param.DeprecatedCRLFlag>false</param.DeprecatedCRLFlag>
+      <param.TargetLangStandard />
+      <param.CodeReplacementLibrary />
+      <param.DeprecatedCRLFlag />
       <param.SameHardware>true</param.SameHardware>
       <param.Toolchain>Automatically locate an installed toolchain</param.Toolchain>
-      <param.BuildConfiguration>Faster Builds</param.BuildConfiguration>
+      <param.BuildConfiguration />
       <param.CustomToolchainOptions />
       <var.ToolchainSettingsVisible />
       <param.target.Data />
@@ -221,19 +221,19 @@
       <param.HardwareAtomicIntegerSize.Target>option.HardwareAtomicIntegerSize.Char</param.HardwareAtomicIntegerSize.Target>
       <param.HardwareAtomicFloatSize.Target>option.HardwareAtomicFloatSize.None</param.HardwareAtomicFloatSize.Target>
       <param.HardwareDivisionRounding.Target>option.HardwareDivisionRounding.Zero</param.HardwareDivisionRounding.Target>
-      <param.CastingMode>option.CastingMode.Nominal</param.CastingMode>
-      <param.IndentStyle>option.IndentStyle.K&amp;R</param.IndentStyle>
-      <param.IndentSize>2</param.IndentSize>
+      <param.CastingMode />
+      <param.IndentStyle />
+      <param.IndentSize />
       <param.ConstantFoldingTimeout>40000</param.ConstantFoldingTimeout>
       <param.CompileTimeRecursionLimit>50</param.CompileTimeRecursionLimit>
       <param.EnableRuntimeRecursion>true</param.EnableRuntimeRecursion>
-      <param.IncludeTerminateFcn>true</param.IncludeTerminateFcn>
+      <param.IncludeTerminateFcn />
       <param.GenerateExampleMain>option.GenerateExampleMain.GenerateCodeOnly</param.GenerateExampleMain>
       <param.PreserveVariableNames>option.PreserveVariableNames.None</param.PreserveVariableNames>
       <param.TargetLang>option.TargetLang.C</param.TargetLang>
       <param.CCompilerOptimization />
       <param.CCompilerCustomOptimizations />
-      <param.GenerateMakefile>true</param.GenerateMakefile>
+      <param.GenerateMakefile />
       <param.BuildToolEnable>false</param.BuildToolEnable>
       <param.MakeCommand />
       <param.TemplateMakefile />
@@ -241,14 +241,14 @@
       <param.InlineThreshold>10</param.InlineThreshold>
       <param.InlineThresholdMax>200</param.InlineThresholdMax>
       <param.InlineStackLimit>4000</param.InlineStackLimit>
-      <param.EnableStrengthReduction>false</param.EnableStrengthReduction>
+      <param.EnableStrengthReduction />
       <param.EnableMemcpy>true</param.EnableMemcpy>
       <param.MemcpyThreshold>64</param.MemcpyThreshold>
       <param.EnableOpenMP>true</param.EnableOpenMP>
       <param.InitFltsAndDblsToZero>true</param.InitFltsAndDblsToZero>
-      <param.PassStructByReference>true</param.PassStructByReference>
+      <param.PassStructByReference />
       <param.CustomLAPACKCallback />
-      <param.UseECoderFeatures>true</param.UseECoderFeatures>
+      <param.UseECoderFeatures />
       <unset>
         <param.WorkingFolder />
         <param.SpecifiedWorkingFolder />
@@ -740,7 +740,7 @@
     <param.AutoInferUnboundedSizeThreshold>2048</param.AutoInferUnboundedSizeThreshold>
     <param.EnableFixedPointStep>false</param.EnableFixedPointStep>
     <param.EnableScreener>true</param.EnableScreener>
-    <param.AnnotationChecksum>193681919</param.AnnotationChecksum>
+    <param.AnnotationChecksum>4031824227</param.AnnotationChecksum>
     <var.LegacyTarget />
     <var.MirrorOnOpen>false</var.MirrorOnOpen>
     <param.FixedPointEnabled>false</param.FixedPointEnabled>
@@ -749,13 +749,13 @@
     <param.unifiedParamStorage />
     <var.gc.lastOutputRoot>codegen\mex\getCoeffs2D_Linear</var.gc.lastOutputRoot>
     <var.gc.lastOutputType>MEX_FILE</var.gc.lastOutputType>
-    <var.gc.preBuildChecksum>663364155</var.gc.preBuildChecksum>
+    <var.gc.preBuildChecksum>938686123</var.gc.preBuildChecksum>
     <var.cfi.lastOutputRoot>codegen\mex\getCoeffs2D_Linear</var.cfi.lastOutputRoot>
-    <var.cfi.preBuildChecksum>2203914850</var.cfi.preBuildChecksum>
+    <var.cfi.preBuildChecksum>2959429381</var.cfi.preBuildChecksum>
     <var.lastCfiTestSnippet>getCoeffs2D_Linear( mesh0 )</var.lastCfiTestSnippet>
     <var.outdatedOnRestore>false</var.outdatedOnRestore>
-    <var.lastUserSourceChecksum>&lt;?xml version="1.0" encoding="UTF-8" standalone="yes"?&gt;&lt;checksum&gt;&lt;includedFiles&gt;&lt;file&gt;D:\文档\课件\研究生[CSRC]\2017-02 有限元方法及其应用[张智民, Martin Stynes]\2017-03-21 Project 2_2D FEM\program_2D\getCoeffs2D_Linear.m&lt;/file&gt;&lt;/includedFiles&gt;&lt;value&gt;3976799458&lt;/value&gt;&lt;/checksum&gt;</var.lastUserSourceChecksum>
-    <var.sourceSetState>&lt;?xml version="1.0" encoding="UTF-8" standalone="yes"?&gt;&lt;sourceModel&gt;&lt;primarySourceFiles&gt;&lt;file&gt;D:\文档\课件\研究生[CSRC]\2017-02 有限元方法及其应用[张智民, Martin Stynes]\2017-03-21 Project 2_2D FEM\program_2D\getCoeffs2D_Linear.m&lt;/file&gt;&lt;/primarySourceFiles&gt;&lt;fixedPointSourceFiles/&gt;&lt;fixedPointSourceRegistered&gt;false&lt;/fixedPointSourceRegistered&gt;&lt;fixedPointSourceSelected&gt;false&lt;/fixedPointSourceSelected&gt;&lt;/sourceModel&gt;</var.sourceSetState>
+    <var.lastUserSourceChecksum>&lt;?xml version="1.0" encoding="UTF-8" standalone="yes"?&gt;&lt;checksum&gt;&lt;includedFiles&gt;&lt;file&gt;D:\文档\学校\研究生[CSRC]\课程\2017-02 有限元方法及其应用[张智民, Martin Stynes]\2017-03-21 Project 2_2D FEM\program_2D\getCoeffs2D_Linear.m&lt;/file&gt;&lt;/includedFiles&gt;&lt;value&gt;634450415&lt;/value&gt;&lt;/checksum&gt;</var.lastUserSourceChecksum>
+    <var.sourceSetState>&lt;?xml version="1.0" encoding="UTF-8" standalone="yes"?&gt;&lt;sourceModel&gt;&lt;primarySourceFiles&gt;&lt;file&gt;D:\文档\学校\研究生[CSRC]\课程\2017-02 有限元方法及其应用[张智民, Martin Stynes]\2017-03-21 Project 2_2D FEM\program_2D\getCoeffs2D_Linear.m&lt;/file&gt;&lt;/primarySourceFiles&gt;&lt;fixedPointSourceFiles/&gt;&lt;fixedPointSourceRegistered&gt;false&lt;/fixedPointSourceRegistered&gt;&lt;fixedPointSourceSelected&gt;false&lt;/fixedPointSourceSelected&gt;&lt;/sourceModel&gt;</var.sourceSetState>
     <param.forceMexBuild>false</param.forceMexBuild>
     <param.configImportActive>false</param.configImportActive>
     <var.boundToGui>true</var.boundToGui>
@@ -884,7 +884,7 @@
     </unset>
     <fileset.entrypoints>
       <file custom-data-expanded="false" value="${PROJECT_ROOT}\getCoeffs2D_Linear.m">
-        <Marker>1490426858035</Marker>
+        <Marker>1490538619405</Marker>
       </file>
     </fileset.entrypoints>
     <fileset.testbench />
@@ -896,23 +896,23 @@
             <Field Name="Nedges" typeId="1" />
             <Field Name="Nsurfaces" typeId="1" />
             <Field Name="nodes" typeId="2">
-              <Field Name="x" typeId="1" />
-              <Field Name="y" typeId="1" />
-              <Field Name="s" typeId="3" />
-              <Field Name="onBoundary" typeId="1" />
+              <Field Name="x" typeId="3" />
+              <Field Name="y" typeId="3" />
+              <Field Name="s" typeId="4" />
+              <Field Name="onBoundary" typeId="3" />
             </Field>
             <Field Name="edges" typeId="2">
-              <Field Name="n" typeId="4" />
-              <Field Name="s" typeId="4" />
-              <Field Name="onBoundary" typeId="1" />
+              <Field Name="n" typeId="5" />
+              <Field Name="s" typeId="5" />
+              <Field Name="onBoundary" typeId="3" />
             </Field>
             <Field Name="surfaces" typeId="2">
-              <Field Name="n" typeId="3" />
-              <Field Name="e" typeId="3" />
-              <Field Name="x" typeId="4" />
-              <Field Name="y" typeId="4" />
-              <Field Name="hx" typeId="1" />
-              <Field Name="hy" typeId="1" />
+              <Field Name="n" typeId="4" />
+              <Field Name="e" typeId="4" />
+              <Field Name="x" typeId="5" />
+              <Field Name="y" typeId="5" />
+              <Field Name="hx" typeId="3" />
+              <Field Name="hy" typeId="3" />
             </Field>
           </Input>
           <idpTable>
@@ -937,7 +937,7 @@
             </type>
             <type typeId="2">
               <Class>struct</Class>
-              <Size>:inf x 1</Size>
+              <Size>1 x 1</Size>
               <Value />
               <InitialValue />
               <UserDefined>true</UserDefined>
@@ -948,18 +948,26 @@
             </type>
             <type typeId="3">
               <Class>double</Class>
-              <Size>4 x 1</Size>
+              <Size>:inf x 1</Size>
               <Value />
               <InitialValue />
-              <UserDefined>false</UserDefined>
+              <UserDefined>true</UserDefined>
               <Complex>false</Complex>
             </type>
             <type typeId="4">
               <Class>double</Class>
-              <Size>2 x 1</Size>
+              <Size>4 x :inf</Size>
               <Value />
               <InitialValue />
-              <UserDefined>false</UserDefined>
+              <UserDefined>true</UserDefined>
+              <Complex>false</Complex>
+            </type>
+            <type typeId="5">
+              <Class>double</Class>
+              <Size>2 x :inf</Size>
+              <Value />
+              <InitialValue />
+              <UserDefined>true</UserDefined>
               <Complex>false</Complex>
             </type>
           </idpTable>
@@ -967,7 +975,7 @@
       </file>
     </fileset.inputtypes>
     <build-deliverables>
-      <file location="D:\文档\课件\研究生[CSRC]\2017-02 有限元方法及其应用[张智民, Martin Stynes]\2017-03-21 Project 2_2D FEM\program_2D" name="getCoeffs2D_Linear_mex.mexw64" optional="false">D:\文档\课件\研究生[CSRC]\2017-02 有限元方法及其应用[张智民, Martin Stynes]\2017-03-21 Project 2_2D FEM\program_2D\getCoeffs2D_Linear_mex.mexw64</file>
+      <file location="D:\文档\学校\研究生[CSRC]\课程\2017-02 有限元方法及其应用[张智民, Martin Stynes]\2017-03-21 Project 2_2D FEM\program_2D" name="getCoeffs2D_Linear_mex.mexw64" optional="false">D:\文档\学校\研究生[CSRC]\课程\2017-02 有限元方法及其应用[张智民, Martin Stynes]\2017-03-21 Project 2_2D FEM\program_2D\getCoeffs2D_Linear_mex.mexw64</file>
     </build-deliverables>
     <workflow />
     <matlab>
