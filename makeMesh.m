@@ -38,7 +38,7 @@ function mesh = makeMesh( type,n,varargin )
 %          .y(1:2,i)         y coordinates of surface i
 %          .hx(i)            width of surface i along x axis
 %          .hy(i)            width of surface i along y axis
-
+use_mex=1;
 
 switch type
     case 'boxSegUniform'
@@ -71,8 +71,11 @@ switch type
         clear tmp len;
         xList=coList{1};
         yList=coList{2};
-        
-        mesh=makeMesh_box_mex(xList,yList);
+        if use_mex
+            mesh=makeMesh_box_mex(xList,yList);
+        else
+            mesh=makeMesh_box(xList,yList);
+        end
         
     case 'LshapeSegUniform'
         % Make mesh for [-1,1] x [0,1] and [-1,0] x [-1,0] by calling makeMesh_box

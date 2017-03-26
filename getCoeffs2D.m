@@ -8,11 +8,17 @@ function [ S,Cx,Cy,M,vecf,id2fun,fun2id ] = getCoeffs2D( mesh,basis,f )
 %                   node No. if this basis correspond to a spatial point.
 %
 %
+use_mex=1;
+
 switch basis
     case 'Linear'
         
         % get vectorized coeff matrix
-        [ id2fun, fun2id, Ninner, hxList, hyList, xList, yList, Svec, Cxvec, Cyvec, Mvec ]=getCoeffs2D_Linear_mex(mesh);
+        if use_mex
+            [ id2fun, fun2id, Ninner, hxList, hyList, xList, yList, Svec, Cxvec, Cyvec, Mvec ]=getCoeffs2D_Linear_mex(mesh);
+        else
+            [ id2fun, fun2id, Ninner, hxList, hyList, xList, yList, Svec, Cxvec, Cyvec, Mvec ]=getCoeffs2D_Linear(mesh);
+        end
 
         % generate sparse matrix
         S=sparse(Svec(:,1),Svec(:,2),Svec(:,3),Ninner,Ninner);
