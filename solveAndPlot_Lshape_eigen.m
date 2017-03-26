@@ -1,14 +1,10 @@
 % Finite Element Method Solver
 
 %% parameters
-b=[1;0];
-c=100;
-k=1;
-f=@(x,y)x.^2+1;
-epsilon=1e-5;
-n={[2^9+1];[2^8]};
-w={[];[]};
-meshType='boxSegUniform';
+epsilon=1;
+n={[2^8+1];[2^8];[2^8];[2^8]};
+w={[];[];[];[]};
+meshType='LshapeSegUniform';
 basis='Linear';
 
 
@@ -17,18 +13,19 @@ basis='Linear';
 % get the coefficient matrices S, C, M and vecf
 %meshWidth=min(0.49,epsilon/b*2.5*log(n));
 mesh0=makeMesh(meshType,n,w);
-[S,Cx,Cy,M,vecf,id2fun,fun2id]=getCoeffs2D(mesh0,basis,f);
+[S,Cx,Cy,M,vecf,id2fun,fun2id]=getCoeffs2D(mesh0,basis);
 
 % the following depends on n, epsilon, b and c
-H=epsilon*S+b(1)*Cx+b(2)*Cy+c*M;
+H=epsilon*S;
 
 % solve
-u=H\vecf;
-% job=batch('[u,D]=eigs(H,5,''sm'')');
-% wait(job);
-% load(job);
-% delete(job);
+% u=H\vecf;
+job=batch('[u,D]=eigs(H,100,''sa'')');
+wait(job);
+load(job);
+delete(job);
 
+save;
 
 %% interpolant
 % get node coordinates
@@ -37,7 +34,7 @@ xList=mesh0.nodes.x;yList=mesh0.nodes.y;
 
 % prepare solution data
 Ninner=length(u);
-tmp_u=[u(:,1);zeros(N-Ninner,1)];
+tmp_u=[u(:,5);zeros(N-Ninner,1)];
 tmp_x=[xList(id2fun(1:Ninner));xList(fun2id==0)];
 tmp_y=[yList(id2fun(1:Ninner));yList(fun2id==0)];
 
