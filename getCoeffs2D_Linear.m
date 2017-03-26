@@ -1,37 +1,59 @@
 function [ id2fun, fun2id, Ninner, hxList, hyList, xList, yList, Svec, Cxvec, Cyvec, Mvec ] = getCoeffs2D_Linear( mesh )
-%GETCOEFFS2D_LINEAR Summary of this function goes here
-%   Detailed explanation goes here
+%Generate the coeff matrices for linear basis
+%   Called by function getCoeffs2D()
     N=mesh.Nnodes;
     % generate id2fun and fun2id
-    id2fun=zeros(N,1);
+    % id means the index of a basis function in the coeff vector, fun means the basis function name or 
+    % node No. if this basis correspond to a spatial point.
+    id2fun=find(mesh.nodes.onBoundary == 0);
+    Ninner=length(id2fun);
     fun2id=zeros(N,1);
-    Ninner=1;
-    for i=1:N
-        if ~mesh.nodes(i).onBoundary
-            id2fun(Ninner)=i;
-            fun2id(i)=Ninner;
-            Ninner=Ninner+1;
-        end
-    end
-    Ninner=Ninner-1;
-    id2fun=id2fun(1:Ninner);
+    fun2id(id2fun)=(1:Ninner)';
+    
+%     id2fun=zeros(N,1);
+%     fun2id=zeros(N,1);
+%     Ninner=1;
+%     for i=1:N
+%         if ~mesh.nodes(i).onBoundary
+%             id2fun(Ninner)=i;
+%             fun2id(i)=Ninner;
+%             Ninner=Ninner+1;
+%         end
+%     end
+%     Ninner=Ninner-1;
+%     id2fun=id2fun(1:Ninner);
 
     % extract node info first
     adjNodeList=zeros(4,2,Ninner);  % adjNode(:,1): four corner nodes, adjNode(:,2): four adjacent nodes, same numbering with edges
     hxList=zeros(2,Ninner);hyList=zeros(2,Ninner);
-    xList=zeros(Ninner,1);yList=zeros(Ninner,1);
+    xList=mesh.nodes.x(id2fun);
+    yList=mesh.nodes.y(id2fun);
     for i=1:Ninner
-        tNode=mesh.nodes(id2fun(i));
-        xList(i)=tNode.x;
-        yList(i)=tNode.y;
+        Nid=id2fun(i);
         for j=1:4
-            adjNodeList(j,1,i)=mesh.surfaces(tNode.s(j)).n(j);
-            adjNodeList(j,2,i)=mesh.surfaces(tNode.s(j)).n(mod(j,4)+1);
+            adjNodeList(j,1,i)=mesh.surfaces.n(j         , mesh.nodes.s(j,Nid));
+            adjNodeList(j,2,i)=mesh.surfaces.n(mod(j,4)+1, mesh.nodes.s(j,Nid));
         end
-        hxList(:,i)=[mesh.surfaces(tNode.s(3)).hx;  mesh.surfaces(tNode.s(1)).hx];
-        hyList(:,i)=[mesh.surfaces(tNode.s(3)).hy;  mesh.surfaces(tNode.s(1)).hy];
+        hxList(:,i)=[mesh.surfaces.hx(mesh.nodes.s(3,Nid));  mesh.surfaces.hx(mesh.nodes.s(1,Nid))];
+        hyList(:,i)=[mesh.surfaces.hy(mesh.nodes.s(3,Nid));  mesh.surfaces.hy(mesh.nodes.s(1,Nid))];
     end
-
+    
+%     adjNodeList=zeros(4,2,Ninner);  % adjNode(:,1): four corner nodes, adjNode(:,2): four adjacent nodes, same numbering with edges
+%     hxList=zeros(2,Ninner);hyList=zeros(2,Ninner);
+%     xList=zeros(Ninner,1);yList=zeros(Ninner,1);
+%     for i=1:Ninner
+%         tNode=mesh.nodes(id2fun(i));
+%         xList(i)=tNode.x;
+%         yList(i)=tNode.y;
+%         for j=1:4
+%             adjNodeList(j,1,i)=mesh.surfaces(tNode.s(j)).n(j);
+%             adjNodeList(j,2,i)=mesh.surfaces(tNode.s(j)).n(mod(j,4)+1);
+%         end
+%         hxList(:,i)=[mesh.surfaces(tNode.s(3)).hx;  mesh.surfaces(tNode.s(1)).hx];
+%         hyList(:,i)=[mesh.surfaces(tNode.s(3)).hy;  mesh.surfaces(tNode.s(1)).hy];
+%     end
+    
+%-------------------- The following do not read mesh any more -----------------------
     % generate coeff matrices
     Svec=zeros(9*Ninner,3);
     Cxvec=zeros(6*Ninner,3);
