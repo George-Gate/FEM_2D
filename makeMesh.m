@@ -15,8 +15,8 @@ function mesh = makeMesh( type,n,varargin )
 %                     n: 4 x 1 cell where n{i} is a vector, giving the point number on each interval.
 %                     w: 4 x 1 cell where length(w{i})=length(n{i})-1, giving the width of each interval. 
 %                        Input should ensure that sum(w{i})<1, the width of last interval is set to 1-sum(w{i}).
-%                  i=1,2 describe the x, y axis division of box [-1,0] x [-1,1]. 
-%                  i=3,4 describe the x, y axis division of box [0,1] x [0,1].
+%                  i=1,2 describe the x axis division of [-1,0] and [0,1]. 
+%                  i=3,4 describe the y axis division of [-1,0] and [0,1].
 %           [Usage] mesh = makeMesh( 'LshapeSegUniform', n, w );
 %
 
@@ -55,6 +55,8 @@ switch type
         mesh=makeMesh_box_mex(xList,yList);
         
     case 'LshapeSegUniform'
+        % Make mesh for [-1,1] x [0,1] and [-1,0] x [-1,0] by calling makeMesh_box
+        % And then combine then into one mesh
         
     otherwise
         error(['Invalid mesh type: ',type]);
