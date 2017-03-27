@@ -48,3 +48,4 @@ Temporary Items
 codegen/*
 *.fig
 *.mexw64
+*.mat

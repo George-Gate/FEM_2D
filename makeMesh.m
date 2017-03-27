@@ -112,10 +112,11 @@ switch type
         clear tmp len;
         
         % make mesh
-        xList1=coList{1}-1;
-        xList2=coList{2};
-        yList1=coList{3}-1;
-        yList2=coList{4};
+        zoom=1;
+        xList1=zoom*(coList{1}-1);
+        xList2=zoom*coList{2};
+        yList1=zoom*(coList{3}-1);
+        yList2=zoom*coList{4};
         
         if use_mex
             mesh0=makeMesh_box_mex([xList1(1:end-1);xList2],yList2);

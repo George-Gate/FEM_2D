@@ -1,8 +1,9 @@
 % Finite Element Method Solver
 
 %% parameters
-n={[2^9+1;2^9];[2^9;2^9];[2^9;2^9];[2^9;2^9]};
-w={[0.9];[0.1];[0.9];[0.1]};
+epsilon=1;
+n={[2^8+1];[2^8];[2^8];[2^8]};
+w={[];[];[];[]};
 meshType='LshapeSegUniform';
 basis='Linear';
 
@@ -12,11 +13,14 @@ basis='Linear';
 % get the coefficient matrices S, C, M and vecf
 %meshWidth=min(0.49,epsilon/b*2.5*log(n));
 mesh0=makeMesh(meshType,n,w);
-[S,~,~,~,~,id2fun,fun2id]=getCoeffs2D(mesh0,basis);
+[S,Cx,Cy,M,vecf,id2fun,fun2id]=getCoeffs2D(mesh0,basis);
 
+% the following depends on n, epsilon, b and c
+H=epsilon*S;
 
 % solve
-job=batch('[u,D]=eigs(S,100,''sa'')');
+% u=H\vecf;
+job=batch('[u,D]=eigs(H,100,''sa'')');
 % wait(job);
 % load(job);
 % delete(job);
@@ -42,10 +46,9 @@ figure();
 nx=200;ny=200;
 [x,y]=meshgrid( linspace(min(xList),max(xList),nx) , linspace(min(yList),max(yList),ny) );
 % contour(x,y,imag(numSol(x,y)));hold on;
-mesh(x,y,-(numSol(x,y)),numSol(x,y)/5e-3);hold on;
-colormap(gca,'jet');
-% caxis([0 1]);
-W=0.8;set(gca,'xlim',[-W,W],'ylim',[-W,W]);
+mesh(x,y,-(numSol(x,y)),numSol(x,y));hold on;
+colormap(gca,'hot');
+caxis()
 
 % refine plot
 % title(['$$N=',num2str(N),'\quad \varepsilon=$$',num2str(epsilon),'$$\quad b=',num2str(b),'\quad c=',num2str(c),'\quad f(x)=x^k, k=',num2str(k),'$$  dFmt=',dFmt],'interpreter','latex');
