@@ -2,13 +2,13 @@
 
 %% parameters
 % shishkin type mesh
-% nPerAxis=2^10;
-% n={[nPerAxis/4;nPerAxis/4];[nPerAxis/4;nPerAxis/4];[nPerAxis/4;nPerAxis/4];[nPerAxis/4;nPerAxis/4]};
-% w={[0.9];[0.1];[0.9];[0.1]};
-% uniform mesh
 nPerAxis=2^10;
-n={[nPerAxis/2];[nPerAxis/2];[nPerAxis/2];[nPerAxis/2]};
-w={[];[];[];[]};
+n={[nPerAxis/4;nPerAxis/4];[nPerAxis/4;nPerAxis/4];[nPerAxis/4;nPerAxis/4];[nPerAxis/4;nPerAxis/4]};
+w={[0.98];[0.02];[0.98];[0.02]};
+% uniform mesh
+% nPerAxis=2^12;
+% n={[nPerAxis/2];[nPerAxis/2];[nPerAxis/2];[nPerAxis/2]};
+% w={[];[];[];[]};
 
 meshType='LshapeSegUniform';
 basis='Linear';
@@ -18,19 +18,15 @@ basis='Linear';
 % the following depends on dFmt, f(x) and n
 % get the coefficient matrices S, C, M and vecf
 %meshWidth=min(0.49,epsilon/b*2.5*log(n));
+tic;
 mesh0=makeMesh(meshType,n,w);
-[S,~,~,M,~,id2fun,fun2id]=getCoeffs2D(mesh0,basis);
-
+disp(['Time to makeMesh: ',num2str(toc)]);tic;
+[S,~,~,~,vecf,id2fun,fun2id]=getCoeffs2D(mesh0,basis,1);
+disp(['Time to getCoeffs: ',num2str(toc)]);tic;
 
 % solve
-opts.issym=1;
-opts.p=400;
-% [u,D]=eigs(S,M,10,'sa');
-job=batch('tic;[u,D]=eigs(S,M,20,''sa'',opts);toc;');
-% wait(job);
-% load(job);
-% delete(job);
-% 
+u=S\vecf;
+disp(['Time to solve linear system: ',num2str(toc)]);tic;
 % save;
 
 %% interpolant
@@ -48,18 +44,21 @@ tmp_y=[yList(id2fun(1:Ninner));yList(fun2id==0)];
 % interpolant
 numSol=scatteredInterpolant(tmp_x,tmp_y,tmp_u);
 
-% plot
+disp(['Time to interpolant: ',num2str(toc)]);
+
+%% plot
+plotSol=@(x,y)numSol_uniform_standard(x,y);
 figure();
 nx=200;ny=200;
-[x,y]=meshgrid( linspace(min(xList),max(xList),nx) , linspace(min(yList),max(yList),ny) );
+[x,y]=meshgrid( linspace(-1,1,nx) , linspace(-1,1,ny) );
 % contour(x,y,imag(numSol(x,y)));hold on;
 % normalize maximum to 1
-valMax=max(max(numSol(x,y)));
-valMin=min(min(numSol(x,y)));
+valMax=max(max(plotSol(x,y)));
+valMin=min(min(plotSol(x,y)));
 if abs(valMax)<abs(valMin)
     valMax=valMin;
 end
-surf(x,y,(numSol(x,y)/valMax),numSol(x,y),'lineStyle','none');hold on;
+surf(x,y,(plotSol(x,y)/valMax),plotSol(x,y),'lineStyle','none');hold on;
 colormap(gca,'jet');
 % caxis([0 1]);
 W=1;set(gca,'xlim',[-W,W],'ylim',[-W,W]);

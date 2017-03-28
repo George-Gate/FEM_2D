@@ -6,9 +6,10 @@ function [ S,Cx,Cy,M,vecf,id2fun,fun2id ] = getCoeffs2D( mesh,basis,f )
 %   
 %   id2fun, fun2id: id means the index of a basis function in the coeff vector, fun means the basis function name or 
 %                   node No. if this basis correspond to a spatial point.
+% [Usage]
+%      [ S,Cx,Cy,M,vecf,id2fun,fun2id ] = getCoeffs2D( mesh,basis,f )
 %
-%
-use_mex=1;
+use_mex=0;
 
 switch basis
     case 'Linear'
@@ -40,7 +41,7 @@ switch basis
                 sgns=[1;-1;1];
                 parfor i=1:Ninner
                     % get node info
-                    Nid=i;  xi=xList(i);yi=yList(i);     hx=hxList(:,i);hy=hyList(:,i);
+                    xi=xList(i);yi=yList(i);     hx=hxList(:,i);hy=hyList(:,i);
 
                     % integrate
                     for k=1:2      % hy(k)
@@ -50,12 +51,15 @@ switch basis
                         end
                     end
                 end
+            elseif isnumeric(f)
+                % for constant f
+                vecf=(hxList(1,:).*hyList(1,:)+hxList(1,:).*hyList(2,:)+hxList(2,:).*hyList(1,:)+hxList(2,:).*hyList(2,:))'/4;
             else
                 % for the case that f(x,y) is not separable
                 sgns=[1;-1;1];
                 parfor i=1:Ninner
                     % get node info
-                    Nid=i;    xi=xList(i);yi=yList(i);   hx=hxList(:,i);hy=hyList(:,i);
+                    xi=xList(i);yi=yList(i);   hx=hxList(:,i);hy=hyList(:,i);
 
                     % integrate
                     for k=1:2      % hy(k)
