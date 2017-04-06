@@ -141,10 +141,10 @@
     
 %-------------------- The following do not read mesh any more -----------------------
     % generate coeff vectors
-    Svec=zeros(10*Nbasis,3);
-    Cxvec=zeros(10*Nbasis,3);
-    Cyvec=zeros(10*Nbasis,3);
-    Mvec=zeros(10*Nbasis,3);
+    Svec=zeros(100*Nbasis,3);
+    Cxvec=zeros(100*Nbasis,3);
+    Cyvec=zeros(100*Nbasis,3);
+    Mvec=zeros(100*Nbasis,3);
     topS=1;topM=1;topCx=1;topCy=1;
     for iNo=1:Nbasis
         % consider the line for ( basis(iNo) , u )
@@ -156,13 +156,13 @@
                 adjFace=adjFaceList(:,Nid);
                 hx=hxList(1:2,Nid);
                 hy=hyList(1:2,Nid);
-                % construct M matrix
+                % ========== construct M matrix ===============    (A(x)B(y),C(x)D(y))=(A,C)(B,D)
                 Nline=9+12*2+4*4;
                 Mvec(topM:topM+Nline-1,1)=iNo;  
                 % overlap with 9 adjacent nodal basis
                 Mvec(topM:topM+8,2)=[No_adjNode(:,1);No_adjNode(:,2);iNo];
-                Mvec(topM:topM+8,3)=[hx([2;1;1;2])/6;sum(hx)/3;hx(1)/6  ;sum(hx)/3;hx(2)/6  ;sum(hx)/3]...  % x part of the integral 
-                                  .*[hy([2;2;1;1])/6;hy(2)/6  ;sum(hy)/3;hy(1)/6  ;sum(hy)/3;sum(hy)/3];    % y part of the integral 
+                Mvec(topM:topM+8,3)=[hx([2;1;1;2])/6;sum(hx)/3;hx(1)/6  ;sum(hx)/3;hx(2)/6  ;sum(hx)/3]...  % x part of the integral, (A,C)
+                                  .*[hy([2;2;1;1])/6;hy(2)/6  ;sum(hy)/3;hy(1)/6  ;sum(hy)/3;sum(hy)/3];    % y part of the integral, (B,D)
                 % overlap with 12 adjacent edge basis group
                 Mvec(topM+9:topM+9+11,2)=fun2No.edge(2,[adjEdge(1:6,1);adjEdge(1:6,2)])';  % m=2
                 Mvec(topM+9:topM+9+11,3)=[hx(1)/6;sum(hx)/3;hx(2)/6;hx(1)/6;sum(hx)/3;hx(2)/6;        -hx([1;1;1;2;2;2])/3    ]...                     % x part of the integral 
@@ -173,15 +173,67 @@
                 % overlap with 4 adjacent face basis group
                 Mvec(topM+9+24:topM+9+24+15,2)=[reshape(fun2No.face(2,2,adjFace(1:4)),4,1);reshape(fun2No.face(2,3,adjFace(1:4)),4,1);...
                                                 reshape(fun2No.face(3,2,adjFace(1:4)),4,1);reshape(fun2No.face(3,3,adjFace(1:4)),4,1)];  
-                Mvec(topM+9+24:topM+9+24+15,3)=
+                Mvec(topM+9+24:topM+9+24+15,3)=[  -hx([2;1;1;2;2;1;1;2])/3                       ;  hx([2;1;1;2;2;1;1;2])/15.*[1;-1;-1;1;1;-1;-1;1] ]...  % x part of the integral 
+                                             .*[  -hy([2;2;1;1])/3; hy([2;2;1;1])/15.*[1;1;-1;-1];  -hy([2;2;1;1])/3; hy([2;2;1;1])/15.*[1;1;-1;-1] ];    % y part of the integral
                 topM=topM+Nline;
-                % construct S matrix
-                
-                
-                % construct Cx, Cy matrix
+                % =========== construct S matrix ===============
+                Nline=9+24;
+                Svec(topS:topS+Nline-1,1)=iNo;
+                % overlap with 9 adjacent nodal basis
+                Svec(topS:topS+8,2)=[No_adjNode(:,1);No_adjNode(:,2);iNo];
+                Svec(topS:topS+8,3)=[-1./hx([2;1;1;2]); sum(1./hx); -1/hx(1)  ; sum(1./hx); -1/hx(2)  ; sum(1./hx) ]...  % (A',C')(B,D)
+                                  .*[  hy([2;2;1;1])/6;  hy(2)/6  ;sum(hy)/3  ;  hy(1)/6  ;sum(hy)/3  ; sum(hy)/3]...
+                                   +[  hx([2;1;1;2])/6;  sum(hx)/3; hx(1)/6   ;  sum(hx)/3;  hx(2)/6  ; sum(hx)/3]...  % (A,C)(B',D')
+                                  .*[-1./hy([2;2;1;1]); -1/hy(2)  ; sum(1./hy); -1/hy(1)  ; sum(1./hy); sum(1./hy) ];
+                % overlap with 12 adjacent edge basis group
+                Svec(topS+9:topS+9+11,2)=fun2No.edge(2,[adjEdge(1:6,1);adjEdge(1:6,2)])';  % m=2
+                Svec(topS+9:topS+9+11,3)=[-1/hx(1);sum(1./hx);-1/hx(2);-1/hx(1);sum(1./hx);-1/hx(2);        -hx([1;1;1;2;2;2])/3    ]...              % (A',C')(B,D) for vertical edge
+                                       .*[              -hy([2;2;2;1;1;1])/3          ;-1/hy(2);sum(1./hy);-1/hy(1);-1/hy(2);sum(1./hy);-1/hy(1)];    % and (A,C)(B',D') for horizontal
+                Svec(topS+9+12:topS+9+23,2)=fun2No.edge(3,[adjEdge(1:6,1);adjEdge(1:6,2)])'; % m=3
+                Svec(topS+9+12:topS+9+23,3)=[-1/hx(1);sum(1./hx);-1/hx(2);-1/hx(1);sum(1./hx);-1/hx(2);    -hx([1;1;1])/15      ;    hx([2;2;2])/15       ]...   % (A',C')(B,D) for vertical edge
+                                          .*[     hy([2;2;2])/15      ;   -hy([1;1;1])/15       ;-1/hy(2);sum(1./hy);-1/hy(1);-1/hy(2);sum(1./hy);-1/hy(1)];     % and (A,C)(B',D') for horizontal
+                topS=topS+Nline;
+                % =========== construct Cx matrix ==============
+                Nline=6+14+8;
+                Cxvec(topCx:topCx+Nline-1,1)=iNo;
+                % overlap with 6 adjacent nodal basis
+                Cxvec(topCx:topCx+5,2)=[No_adjNode(:,1);No_adjNode([2;4],2)];
+                Cxvec(topCx:topCx+5,3)=[ [1;-1;-1;1     ;-1          ;1]/2 ]...          % (A,C')
+                                     .*[ hy([2;2;1;1])/6; sum(hy)/3  ;  sum(hy)/3  ];    % (B,D)
+                % overlap with 12 adjacent edge basis group
+                Cxvec(topCx+6:topCx+6+9,2)=fun2No.edge(2,[adjEdge([1;3;4;6],1);adjEdge(1:6,2)])';  % m=2
+                Cxvec(topCx+6:topCx+6+9,3)=[   [-1;1;1;-1]/2 ;                  [1;1;1;-1;-1;-1]/3 ]...               % (A,C')
+                                         .*[ -hy([2;2;1;1])/3; hy(2)/6;sum(hy)/3;hy(1)/6;hy(2)/6;sum(hy)/3;hy(1)/6 ]; % (B,D)
+                Cxvec(topCx+6+10:topCx+6+13,2)=fun2No.edge(3,adjEdge([1;3;4;6],1))'; % m=3
+                Cxvec(topCx+6+10:topCx+6+13,3)=[   [-1;1;1;-1]/2                  ]...  % (A,C')
+                                             .*[ hy([2;2;1;1])/15.*[1;1;-1;-1]    ];    % (B,D)
+                % overlap with 4 adjacent face basis group
+                Cxvec(topCx+6+14:topCx+6+14+7,2)=[reshape(fun2No.face(2,2,adjFace(1:4)),4,1);reshape(fun2No.face(2,3,adjFace(1:4)),4,1)];
+                Cxvec(topCx+6+14:topCx+6+14+7,3)=[   [-1;1;1;-1]/3;   [-1;1;1;-1]/3              ]...  % (A,C')
+                                               .*[-hy([2;2;1;1])/3;hy([2;2;1;1])/15.*[1;1;-1;-1] ];    % (B,D)
+                topCx=topCx+Nline;
+                % ============= construct Cy matrix ===============
+                Nline=6+14+8;
+                Cyvec(topCy:topCy+Nline-1,1)=iNo;
+                % overlap with 6 adjacent nodal basis
+                Cxvec(topCx:topCx+5,2)=[No_adjNode(:,1);No_adjNode([1;3],2)];
+                Cxvec(topCx:topCx+5,3)=[ hx([2;1;1;2])/6; sum(hx)/3  ;  sum(hx)/3 ]... % (A,C)
+                                     .*[ [1;1;-1;-1     ;1           ;-1]/2  ];        % (B,D')
+                % overlap with 12 adjacent edge basis group
+                Cxvec(topCx+6:topCx+6+9,2)=fun2No.edge(2,[adjEdge([1;3;4;6],2);adjEdge(1:6,1)])';  % m=2
+                Cxvec(topCx+6:topCx+6+9,3)=[ -hy([1;1;2;2])/3; hx(1)/6;sum(hx)/3;hx(2)/6;hx(1)/6;sum(hx)/3;hx(2)/6]...  % (A,C)
+                                         .*[   [1;-1;1;-1]/2 ;                  [-1;-1;-1;1;1;1]/3  ];                  % (B,D')
+                Cxvec(topCx+6+10:topCx+6+13,2)=fun2No.edge(3,adjEdge([1;3;4;6],2))'; % m=3
+                Cxvec(topCx+6+10:topCx+6+13,3)=[ hx([1;1;2;2])/15.*[-1;-1;1;1]  ]...  % (A,C)
+                                             .*[ [1;-1;1;-1]/2    ];                  % (B,D')
+                % overlap with 4 adjacent face basis group
+                Cxvec(topCx+6+14:topCx+6+14+7,2)=[reshape(fun2No.face(2,2,adjFace(1:4)),4,1);reshape(fun2No.face(2,3,adjFace(1:4)),4,1)];
+                Cxvec(topCx+6+14:topCx+6+14+7,3)=[-hx([2;1;1;2])/3;hx([2;1;1;2])/15.*[1;-1;-1;1]  ]...  % (A,C)
+                                               .*[   [-1;-1;1;1]/3;   [-1;-1;1;1]/3               ];    % (B,D')
+                topCy=topCy+Nline;
             case 'edge'
                 Eid=No2fun.objid(iNo);
-                No_adjNode=fun2No.nodal(adjNodeList(:,:,mesh.Nnodes+Eid));  % 处理零
+                No_adjNode=[fun2No.nodal(adjNodeList(:,1,mesh.Nnodes+Eid)),[fun2No.nodal(adjNodeList(1:2,2,mesh.Nnodes+Eid));0;0]];  % 处理零
                 if abs(diff(mesh.nodes.x(mesh.edges.n(:,Eid))))<=meshEps
                     % for vertical edge
                     hp=hyList(1,mesh.Nnodes+Eid);
@@ -194,7 +246,7 @@
                 
             case 'face'
                 Sid=No2fun.objid(iNo);
-                No_adjNode=fun2No.nodal(adjNodeList(:,:,mesh.Nnodes+mesh.Nedges+Sid));
+                No_adjNode=fun2No.nodal(adjNodeList(:,1,mesh.Nnodes+mesh.Nedges+Sid));
                 
             otherwise
                 error('Unknow basis name!');
