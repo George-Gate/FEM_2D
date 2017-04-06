@@ -1,4 +1,4 @@
-function [ S,Cx,Cy,M,vecf,id2fun,fun2id ] = getCoeffs2D( mesh,basis,f )
+function [ S,Cx,Cy,M,vecf,id2fun,fun2id ] = getCoeffs2D( mesh,basis,f,varargin )
 % Generate the coefficient matrix for a given mesh and basis (2D version)
 %   f: function f(x,y) or f{1}(x)*f{2}(y). Set f=0 if don't need vecf
 %   mesh: a mesh structure returned by makeMesh();
@@ -9,7 +9,7 @@ function [ S,Cx,Cy,M,vecf,id2fun,fun2id ] = getCoeffs2D( mesh,basis,f )
 % [Usage]
 %      [ S,Cx,Cy,M,vecf,id2fun,fun2id ] = getCoeffs2D( mesh,basis,f )
 %
-use_mex=0;
+use_mex=1;
 
 switch basis
     case 'Linear'
@@ -71,7 +71,15 @@ switch basis
                 end
             end
         end
-        
+    case 'Lobatto'
+        % cut off for Lobatto basis
+        M=varargin{1};
+        % get vectorized coeff matrix
+        if use_mex
+            [ id2fun, fun2id, Nbasis, hxList, hyList, xList, yList, Svec, Cxvec, Cyvec, Mvec ]=getCoeffs2D_Lobatto_mex(mesh,M);
+        else
+            [ id2fun, fun2id, Nbasis, hxList, hyList, xList, yList, Svec, Cxvec, Cyvec, Mvec ]=getCoeffs2D_Lobatto(mesh,M);
+        end
     otherwise
         error(['Unknow basis: ',basis]);
 end

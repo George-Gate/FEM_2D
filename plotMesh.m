@@ -1,5 +1,5 @@
 figure();
-displayText=1;
+displayText=0;
 displayRelation=0;
 %% plot node
 idOnB=find(mesh0.nodes.onBoundary == 1);
