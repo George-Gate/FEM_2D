@@ -146,10 +146,12 @@ function [ No2fun, fun2No, Nbasis, hxList, hyList, xList, yList, Svec, Cxvec, Cy
     
 %-------------------- The following do not read mesh any more except mesh.Nnodes and mesh.Nedges -----------------------
     % generate coeff vectors
-    Svec=zeros(100*Nbasis,3);
-    Cxvec=zeros(100*Nbasis,3);
-    Cyvec=zeros(100*Nbasis,3);
-    Mvec=zeros(100*Nbasis,3);
+    nVertical=sum(edgeDir(edgeDir==1));
+    nHorizontal=sum(edgeDir(edgeDir==2))/2;
+    Svec=zeros(33*Nnodal+13*Nedge+5*Nface,3);
+    Cxvec=zeros(28*Nnodal+(14*nHorizontal+12*nVertical)*K+6*Nface,3);
+    Cyvec=zeros(28*Nnodal+(12*nHorizontal+14*nVertical)*K+6*Nface,3);
+    Mvec=zeros(49*Nnodal+21*Nedge+9*Nface,3);
     topS=1;topM=1;topCx=1;topCy=1;
     for iNo=1:Nbasis
         % consider the line for ( basis(iNo) , u )
@@ -336,7 +338,7 @@ function [ No2fun, fun2No, Nbasis, hxList, hyList, xList, yList, Svec, Cxvec, Cy
                 subid=No2fun.subid(iNo,:)';
                 No_adjNode=fun2No.nodal(adjNodeList(:,1,mesh.Nnodes+mesh.Nedges+Sid));
                 adjEdge=adjEdgeList(1:2,:,mesh.Nnodes+mesh.Nedges+Sid);
-                hx=hxList(1,Sid); hy=hyList(1,Sid);
+                hx=hxList(1,mesh.Nnodes+mesh.Nedges+Sid); hy=hyList(1,mesh.Nnodes+mesh.Nedges+Sid);
                 
                 pos2No_node=reshape(No_adjNode([3;4;2;1]),2,2);   % use pos2No_node(pos_x+1,pos_y+1) to get node No.
                 %------------- enumerate bases on x dir -------------
@@ -400,10 +402,10 @@ function [ No2fun, fun2No, Nbasis, hxList, hyList, xList, yList, Svec, Cxvec, Cy
         end
     end
     % delete lines that have Xvec(:,2)=0, those are boundary elements.
-    Mvec= Mvec (Mvec (:,2)>0.5 ,1:3);
-    Svec= Svec (Svec (:,2)>0.5 ,1:3);
-    Cxvec=Cxvec(Cxvec(:,2)>0.5 ,1:3);
-    Cyvec=Cyvec(Cyvec(:,2)>0.5 ,1:3);
+    Mvec= Mvec (Mvec (1:topM-1,2)>0.5 ,1:3);
+    Svec= Svec (Svec (1:topS-1,2)>0.5 ,1:3);
+    Cxvec=Cxvec(Cxvec(1:topCx-1,2)>0.5 ,1:3);
+    Cyvec=Cyvec(Cyvec(1:topCy-1,2)>0.5 ,1:3);
     
 end
 
@@ -420,6 +422,8 @@ function result=phiphi(l,m,pos,h)
         elseif m==l-2
             result=-2*h/(2*l-1)/(2*l-5)/(2*l-3);
         end
+    elseif l==1 && m==1
+        result=sum(h,1)/3./(1+abs(pos));
     elseif l==1 && m<4
         if m==2
             result=-h/3;
@@ -432,8 +436,6 @@ function result=phiphi(l,m,pos,h)
         elseif l==3
             result=-h/15.*(2*pos-1);
         end
-    elseif l==1 && m==1
-        result=sum(h,1)/3./(1+abs(pos));
     end
 end
 
