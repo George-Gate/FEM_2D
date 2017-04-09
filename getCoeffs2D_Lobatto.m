@@ -11,7 +11,7 @@ function [ No2fun, fun2No, Nbasis, hxList, hyList, xList, yList, Svec, Cxvec, Cy
     Nedge=(mesh.Nedges-sum(mesh.edges.onBoundary))*K;
     Nface=mesh.Nsurfaces*K*K;
     Nbasis=Nnodal+Nedge+Nface;
-    No2fun.name=strings(Nbasis,1);  % possible values: nodal, edge, face
+    No2fun.name=char(zeros(Nbasis,1));  % possible values: 'n' for nodal; 'e' for edge; 'f' for face
     No2fun.objid=zeros(Nbasis,1);   % to specify which node/edge/surface the basis is bound for.
     No2fun.subid=zeros(Nbasis,2);   % for nodal mode: 1, for edge mode: [1,2~K+1] or [2~K+1,1], for face mode: [2~K+1,2~K+1];
                                     % .subid(:,1): subid for x dirl .subid(:,2): subid for y dir
@@ -21,14 +21,17 @@ function [ No2fun, fun2No, Nbasis, hxList, hyList, xList, yList, Svec, Cxvec, Cy
     
     % set fun2No and No2fun
     % nodal mode
-    No2fun.name(1:Nnodal)='nodal';
+    No2fun.name(1:Nnodal)='n';
     No2fun.objid(1:Nnodal)=find(mesh.nodes.onBoundary==0);
     No2fun.subid(1:Nnodal,1:2)=1;
     fun2No.nodal(No2fun.objid(1:Nnodal))=(1:Nnodal)';
     % edge mode
-    No2fun.name(Nnodal+1:Nnodal+Nedge)='edge';
+    No2fun.name(Nnodal+1:Nnodal+Nedge)='e';
     offset=Nnodal+1;
-    for i=find(mesh.edges.onBoundary==0)'
+    for i=1:mesh.Nedges
+        if mesh.edges.onBoundary(i)==1
+            continue;
+        end
         n=mesh.edges.n(1:2,i);
         if (abs( mesh.nodes.x(n(1)) - mesh.nodes.x(n(2)) )<=meshEps)
             % edge is along y axis
@@ -51,7 +54,7 @@ function [ No2fun, fun2No, Nbasis, hxList, hyList, xList, yList, Svec, Cxvec, Cy
         end
     end
     % face mode
-    No2fun.name(offset:offset+Nface-1)='face';
+    No2fun.name(offset:offset+Nface-1)='f';
     xid=repmat(2:K+1,K,1);xid=xid(:);
     yid=repmat(2:K+1,1,K)';
     for i=1:mesh.Nsurfaces
@@ -84,7 +87,10 @@ function [ No2fun, fun2No, Nbasis, hxList, hyList, xList, yList, Svec, Cxvec, Cy
     edgeDir=zeros(mesh.Nedges,1);  % the direction of an edge. 1: vertical; 2: horizontal; 0: boundary
     
     % for node
-    for i=find(mesh.nodes.onBoundary==0)'
+    for i=1:mesh.Nnodes
+        if mesh.nodes.onBoundary(i)==1
+            continue;
+        end
         Nid=i;
         face=mesh.nodes.s(:,i);
         adjFaceList(1:4,Nid)=face;
@@ -102,7 +108,10 @@ function [ No2fun, fun2No, Nbasis, hxList, hyList, xList, yList, Svec, Cxvec, Cy
     end
     
     % for edge 
-    for i=find(mesh.edges.onBoundary==0)'
+    for i=1:mesh.Nedges
+        if mesh.edges.onBoundary(i)==1
+            continue;
+        end
         Eid=mesh.Nnodes+i;
         face=mesh.edges.s(:,i);
         adjFaceList(1:2,Eid)=face;
@@ -148,15 +157,15 @@ function [ No2fun, fun2No, Nbasis, hxList, hyList, xList, yList, Svec, Cxvec, Cy
     % generate coeff vectors
     nVertical=sum(edgeDir(edgeDir==1));
     nHorizontal=sum(edgeDir(edgeDir==2))/2;
-    Svec=zeros(33*Nnodal+13*Nedge+5*Nface,3);
-    Cxvec=zeros(28*Nnodal+(14*nHorizontal+12*nVertical)*K+6*Nface,3);
-    Cyvec=zeros(28*Nnodal+(12*nHorizontal+14*nVertical)*K+6*Nface,3);
-    Mvec=zeros(49*Nnodal+21*Nedge+9*Nface,3);
+    Svec=zeros(2+33*Nnodal+13*Nedge+5*Nface,3);
+    Cxvec=zeros(2+28*Nnodal+(14*nHorizontal+12*nVertical)*K+6*Nface,3);
+    Cyvec=zeros(2+28*Nnodal+(12*nHorizontal+14*nVertical)*K+6*Nface,3);
+    Mvec=zeros(2+49*Nnodal+21*Nedge+9*Nface,3);
     topS=1;topM=1;topCx=1;topCy=1;
     for iNo=1:Nbasis
         % consider the line for ( basis(iNo) , u )
         switch No2fun.name(iNo)
-            case 'nodal'
+            case 'n'
                 Nid=No2fun.objid(iNo);
                 No_adjNode=fun2No.nodal(adjNodeList(:,:,Nid));
                 adjEdge=adjEdgeList(:,:,Nid);
@@ -238,7 +247,7 @@ function [ No2fun, fun2No, Nbasis, hxList, hyList, xList, yList, Svec, Cxvec, Cy
                 Cxvec(topCx+6+14:topCx+6+14+7,3)=[-hx([2;1;1;2])/3;hx([2;1;1;2])/15.*[1;-1;-1;1]  ]...  % (A,C)
                                                .*[   [-1;-1;1;1]/3;   [-1;-1;1;1]/3               ];    % (B,D')
                 topCy=topCy+Nline;
-            case 'edge'
+            case 'e'
                 Eid=No2fun.objid(iNo);
                 subid=max(No2fun.subid(iNo,1:2));
                 No_adjNode=[fun2No.nodal(adjNodeList(:,1,mesh.Nnodes+Eid)),[fun2No.nodal(adjNodeList(1:2,2,mesh.Nnodes+Eid));0;0]];
@@ -265,7 +274,7 @@ function [ No2fun, fun2No, Nbasis, hxList, hyList, xList, yList, Svec, Cxvec, Cy
                         end
                         % calc phiphi, phidphi, dphidphi first
                         if pos_o==0 && subid_o==1
-                            range=1:2;
+                            range=(1:2)';
                         elseif pos_o==-1
                             range=1;
                         else
@@ -289,9 +298,9 @@ function [ No2fun, fun2No, Nbasis, hxList, hyList, xList, yList, Svec, Cxvec, Cy
                                 if subid_o>1 && subid_p>1
                                     % face basis
                                     if edgeDir(Eid)==1  % if edge Eid is vertical 
-                                        fun2No.face(subid_o,subid_p,adjFace(pos_o+2));
+                                        jNo=fun2No.face(subid_o,subid_p,adjFace(pos_o+2));
                                     else
-                                        fun2No.face(subid_p,subid_o,adjFace(1-pos_o));
+                                        jNo=fun2No.face(subid_p,subid_o,adjFace(1-pos_o));
                                     end  
                                 elseif subid_o==1 && subid_p==1
                                     % nodal basis
@@ -333,7 +342,7 @@ function [ No2fun, fun2No, Nbasis, hxList, hyList, xList, yList, Svec, Cxvec, Cy
                         end
                     end
                 end
-            case 'face'
+            case 'f'
                 Sid=No2fun.objid(iNo);
                 subid=No2fun.subid(iNo,:)';
                 No_adjNode=fun2No.nodal(adjNodeList(:,1,mesh.Nnodes+mesh.Nedges+Sid));
@@ -416,25 +425,25 @@ function result=phiphi(l,m,pos,h)
     result=0;
     if l>1 && m>1
         if m==l
-            result=2*h*(1/(2*l+1)+1/(2*l-3))/(2*l-1)/(2*l-1);
+            result=2*h(1)*(1/(2*l+1)+1/(2*l-3))/(2*l-1)/(2*l-1);
         elseif m==l+2
-            result=-2*h/(2*l-1)/(2*l+3)/(2*l+1);
+            result=-2*h(1)/(2*l-1)/(2*l+3)/(2*l+1);
         elseif m==l-2
-            result=-2*h/(2*l-1)/(2*l-5)/(2*l-3);
+            result=-2*h(1)/(2*l-1)/(2*l-5)/(2*l-3);
         end
     elseif l==1 && m==1
-        result=sum(h,1)/3./(1+abs(pos));
+        result=sum(h)/3/(1+abs(pos));
     elseif l==1 && m<4
         if m==2
-            result=-h/3;
+            result=-h(1)/3;
         elseif m==3
-            result=h/15.*(2*pos+1);
+            result=h(1)/15*(2*pos+1);
         end
     elseif l<4 && m==1
         if l==2
-            result=-h/3;
+            result=-h(1)/3;
         elseif l==3
-            result=-h/15.*(2*pos-1);
+            result=-h(1)/15*(2*pos-1);
         end
     end
 end
@@ -464,13 +473,13 @@ function result=dphidphi(l,m,pos,h)
     result=0;
     if l>1 && m>1
         if m==l
-            result=2./h/(2*l-1);
+            result=2/h(1)/(2*l-1);
         end
     elseif l==1 && m==1
         if pos==0
-            result=sum(1./h,1);
+            result=sum(1./h);
         else
-            result=-1./h;
+            result=-1/h(1);
         end
     end
 end
