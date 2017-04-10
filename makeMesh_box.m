@@ -63,7 +63,7 @@ function mesh = makeMesh_box( xList, yList)
                 n1=(j-1)*Nx+i;  n2=(j-1)*Nx+i+1;
                 mesh.edges.n(:,top)=[n1;  n2];
                 mesh.edges.s(:,top)=[mesh.nodes.s(1,n1); mesh.nodes.s(4,n1)];
-                mesh.edges.onBoundary(top)=mesh.nodes.onBoundary(n1) * mesh.nodes.onBoundary(n2);
+                mesh.edges.onBoundary(top)= (mesh.edges.s(1,top)==0 || mesh.edges.s(2,top)==0);
                 top=top+1;
             end
         end
@@ -73,7 +73,7 @@ function mesh = makeMesh_box( xList, yList)
                 n1=(j-1)*Nx+i;  n2=j*Nx+i;
                 mesh.edges.n(:,top)=[n1;   n2];
                 mesh.edges.s(:,top)=[mesh.nodes.s(2,n1); mesh.nodes.s(1,n1)];
-                mesh.edges.onBoundary(top)=mesh.nodes.onBoundary(n1) * mesh.nodes.onBoundary(n2);
+                mesh.edges.onBoundary(top)= (mesh.edges.s(1,top)==0 || mesh.edges.s(2,top)==0);
                 top=top+1;
             end
         end
