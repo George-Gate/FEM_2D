@@ -2,16 +2,16 @@
 
 %% parameters
 % shishkin type mesh
-% nPerAxis=2^10;
+% nPerAxis=2^5;
 % n={[nPerAxis/4;nPerAxis/4];[nPerAxis/4;nPerAxis/4];[nPerAxis/4;nPerAxis/4];[nPerAxis/4;nPerAxis/4]};
 % w={[0.9];[0.1];[0.9];[0.1]};
 % uniform mesh
-nPerAxis=2^10;
+nPerAxis=2^6;
 n={[nPerAxis/2];[nPerAxis/2];[nPerAxis/2];[nPerAxis/2]};
 w={[];[];[];[]};
 
 meshType='LshapeSegUniform';
-basis='Linear';
+basis='BiLinear';
 
 
 %% numerical solution    
@@ -25,8 +25,8 @@ mesh0=makeMesh(meshType,n,w);
 % solve
 opts.issym=1;
 opts.p=400;
-% [u,D]=eigs(S,M,10,'sa');
-job=batch('tic;[u,D]=eigs(S,M,20,''sa'',opts);toc;');
+[u,D]=eigs(S,M,20,'sa',opts);
+% job=batch('tic;[u,D]=eigs(S,M,20,''sa'',opts);toc;');
 % wait(job);
 % load(job);
 % delete(job);

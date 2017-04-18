@@ -2,7 +2,7 @@ function [ S,Cx,Cy,M,vecf,No2fun,fun2No ] = getCoeffs2D( mesh,basis,f,varargin )
 % Generate the coefficient matrix for a given mesh and basis (2D version)
 %   f: function f(x,y) or f{1}(x)*f{2}(y). Set f=0 if don't need vecf
 %   mesh: a mesh structure returned by makeMesh();
-%   basis: can be one of 'Linear' and 'Lobatto'
+%   basis: can be one of 'BiLinear' and 'Lobatto'
 %   
 %   No2fun, fun2No: No means the index of a basis function in the coeff vector, fun means the basis function name or 
 %                   node id. if this basis correspond to a spatial point.
@@ -11,14 +11,14 @@ function [ S,Cx,Cy,M,vecf,No2fun,fun2No ] = getCoeffs2D( mesh,basis,f,varargin )
 %                      avaliable whan basis='Lobatto'. The default value is [0, 0] for constant f and [inf, inf] otherwise.
 %
 % [Usage]
-%      [ S,Cx,Cy,M,vecf,No2fun,fun2No ] = getCoeffs2D( mesh,'Linear',f )
+%      [ S,Cx,Cy,M,vecf,No2fun,fun2No ] = getCoeffs2D( mesh,'BiLinear',f )
 %      [ S,Cx,Cy,M,vecf,No2fun,fun2No ] = getCoeffs2D( mesh,'Lobatto',f,K )   , K>=2
 %
-use_mex=0;
+use_mex=1;
 
 switch basis
 %============================= Linear basis =============================================================
-    case 'Linear'
+    case 'BiLinear'
         % get vectorized coeff matrix
         if use_mex
             [ No2fun, fun2No, Ninner, hxList, hyList, xList, yList, Svec, Cxvec, Cyvec, Mvec ]=getCoeffs2D_Linear_mex(mesh);
@@ -125,6 +125,7 @@ switch basis
         
         if iscell(f)
         % for the case that f(x,y) is separable
+            error('This function is not finished so far.');
             % for nodal basis
             nodalList=find(No2fun.name=='n');
             sgns=[1;-1;1];
@@ -146,6 +147,7 @@ switch basis
             vecf(nodalList)=tmpvecf;
         elseif isnumeric(f)
         % for constant f
+            error('This function is not finished so far.');
             if f
                 % for nodal basis
                 nodalList=find(No2fun.name=='n');
@@ -209,10 +211,10 @@ switch basis
                     for m=1:2
                         integralList(topIL).ndim=2;
                         if edgeDir(Eid)==1  % vertical edge
-                            integralList(topIL).fun=@(ksi,eta)(1+sgns(m)*ksi).*lobatto_N(subid-1,eta).*f(  hx(m)/2*(ksi-sgns(m))+xi , hy(1)/2*(eta+1)+yi );
+                            integralList(topIL).fun=@(ksi,eta)(1+sgns(m)*ksi).*lobattoP_N(subid-1,eta).*f(  hx(m)/2*(ksi-sgns(m))+xi , hy(1)/2*(eta+1)+yi );
                             integralList(topIL).globalFactor=hx(m)*hy(1)/8;
                         elseif edgeDir(Eid)==2  % horizontal edge
-                            integralList(topIL).fun=@(ksi,eta)lobatto_N(subid-1,ksi).*(1+sgns(m)*eta).*f(  hx(1)/2*(ksi+1)+xi , hy(m)/2*(eta-sgns(m))+yi );
+                            integralList(topIL).fun=@(ksi,eta)lobattoP_N(subid-1,ksi).*(1+sgns(m)*eta).*f(  hx(1)/2*(ksi+1)+xi , hy(m)/2*(eta-sgns(m))+yi );
                             integralList(topIL).globalFactor=hx(1)*hy(m)/8;
                         end
                         integralList(topIL).ub=[ 1; 1];
@@ -237,7 +239,7 @@ switch basis
                         topBL=topBL+1;
 
                         integralList(topIL).ndim=2;
-                        integralList(topIL).fun=@(ksi,eta)lobatto_N(subid_x-1,ksi).*lobatto_N(subid_y-1,eta).*f(  hx(1)/2*(ksi+1)+xi , hy(1)/2*(eta+1)+yi );
+                        integralList(topIL).fun=@(ksi,eta)lobattoP_N(subid_x-1,ksi).*lobattoP_N(subid_y-1,eta).*f(  hx(1)/2*(ksi+1)+xi , hy(1)/2*(eta+1)+yi );
                         integralList(topIL).globalFactor=hx(1)*hy(1)/4;
                         integralList(topIL).ub=[ 1; 1];
                         integralList(topIL).lb=[-1;-1];
@@ -249,7 +251,7 @@ switch basis
             integralValue=parIntegral(integralList,topIL);
             
             % -------------- Set vecf Value -----------------------
-            vecf(basLst(1:topBL-1))=sum(integralValue(sumLst(1:topBL-1,:)),2 );
+            vecf(basLst(1:topBL-1))=sum(integralValue(sumLst(1:topBL-1,:)'),1 );
             
         end
     otherwise

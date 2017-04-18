@@ -182,16 +182,16 @@ function [ No2fun, fun2No, Nbasis, hxList, hyList, xList, yList, edgeDir, Svec, 
                                   .*[hy([2;2;1;1])/6;hy(2)/6  ;sum(hy)/3;hy(1)/6  ;sum(hy)/3;sum(hy)/3];    % y part of the integral, (B,D)
                 % overlap with 12 adjacent edge basis group
                 Mvec(topM+9:topM+9+11,2)=fun2No.edge(2,[adjEdge(1:6,1);adjEdge(1:6,2)])';  % m=2
-                Mvec(topM+9:topM+9+11,3)=[hx(1)/6;sum(hx)/3;hx(2)/6;hx(1)/6;sum(hx)/3;hx(2)/6;        -hx([1;1;1;2;2;2])/3    ]...                     % x part of the integral 
-                                       .*[              -hy([2;2;2;1;1;1])/3                 ;hy(2)/6;sum(hy)/3;hy(1)/6;hy(2)/6;sum(hy)/3;hy(1)/6];    % y part of the integral 
+                Mvec(topM+9:topM+9+11,3)=[hx(1)/6;sum(hx)/3;hx(2)/6;hx(1)/6;sum(hx)/3;hx(2)/6;        -hx([1;1;1;2;2;2])/6    ]...                     % x part of the integral 
+                                       .*[              -hy([2;2;2;1;1;1])/6                 ;hy(2)/6;sum(hy)/3;hy(1)/6;hy(2)/6;sum(hy)/3;hy(1)/6];    % y part of the integral 
                 Mvec(topM+9+12:topM+9+23,2)=fun2No.edge(3,[adjEdge(1:6,1);adjEdge(1:6,2)])'; % m=3
-                Mvec(topM+9+12:topM+9+23,3)=[hx(1)/6;sum(hx)/3;hx(2)/6;hx(1)/6;sum(hx)/3;hx(2)/6;    -hx([1;1;1])/15      ;    hx([2;2;2])/15       ]...  % x part of the integral 
-                                          .*[     hy([2;2;2])/15      ;   -hy([1;1;1])/15       ;hy(2)/6;sum(hy)/3;hy(1)/6;hy(2)/6;sum(hy)/3;hy(1)/6];    % y part of the integral 
+                Mvec(topM+9+12:topM+9+23,3)=[hx(1)/6;sum(hx)/3;hx(2)/6;hx(1)/6;sum(hx)/3;hx(2)/6;    -hx([1;1;1])/30      ;    hx([2;2;2])/30       ]...  % x part of the integral 
+                                          .*[     hy([2;2;2])/30      ;   -hy([1;1;1])/30       ;hy(2)/6;sum(hy)/3;hy(1)/6;hy(2)/6;sum(hy)/3;hy(1)/6];    % y part of the integral 
                 % overlap with 4 adjacent face basis group
                 Mvec(topM+9+24:topM+9+24+15,2)=[reshape(fun2No.face(2,2,adjFace(1:4)),4,1);reshape(fun2No.face(2,3,adjFace(1:4)),4,1);...
                                                 reshape(fun2No.face(3,2,adjFace(1:4)),4,1);reshape(fun2No.face(3,3,adjFace(1:4)),4,1)];  
-                Mvec(topM+9+24:topM+9+24+15,3)=[  -hx([2;1;1;2;2;1;1;2])/3                       ;  hx([2;1;1;2;2;1;1;2])/15.*[1;-1;-1;1;1;-1;-1;1] ]...  % x part of the integral 
-                                             .*[  -hy([2;2;1;1])/3; hy([2;2;1;1])/15.*[1;1;-1;-1];  -hy([2;2;1;1])/3; hy([2;2;1;1])/15.*[1;1;-1;-1] ];    % y part of the integral
+                Mvec(topM+9+24:topM+9+24+15,3)=[  -hx([2;1;1;2;2;1;1;2])/6                       ;  hx([2;1;1;2;2;1;1;2])/30.*[1;-1;-1;1;1;-1;-1;1] ]...  % x part of the integral 
+                                             .*[  -hy([2;2;1;1])/6; hy([2;2;1;1])/30.*[1;1;-1;-1];  -hy([2;2;1;1])/6; hy([2;2;1;1])/30.*[1;1;-1;-1] ];    % y part of the integral
                 topM=topM+Nline;
                 % =========== construct S matrix ===============
                 Nline=9+24;
@@ -204,11 +204,11 @@ function [ No2fun, fun2No, Nbasis, hxList, hyList, xList, yList, edgeDir, Svec, 
                                   .*[-1./hy([2;2;1;1]); -1/hy(2)  ; sum(1./hy); -1/hy(1)  ; sum(1./hy); sum(1./hy) ];
                 % overlap with 12 adjacent edge basis group
                 Svec(topS+9:topS+9+11,2)=fun2No.edge(2,[adjEdge(1:6,1);adjEdge(1:6,2)])';  % m=2
-                Svec(topS+9:topS+9+11,3)=[-1/hx(1);sum(1./hx);-1/hx(2);-1/hx(1);sum(1./hx);-1/hx(2);        -hx([1;1;1;2;2;2])/3    ]...              % (A',C')(B,D) for vertical edge
-                                       .*[              -hy([2;2;2;1;1;1])/3          ;-1/hy(2);sum(1./hy);-1/hy(1);-1/hy(2);sum(1./hy);-1/hy(1)];    % and (A,C)(B',D') for horizontal
+                Svec(topS+9:topS+9+11,3)=[-1/hx(1);sum(1./hx);-1/hx(2);-1/hx(1);sum(1./hx);-1/hx(2);        -hx([1;1;1;2;2;2])/6    ]...              % (A',C')(B,D) for vertical edge
+                                       .*[              -hy([2;2;2;1;1;1])/6          ;-1/hy(2);sum(1./hy);-1/hy(1);-1/hy(2);sum(1./hy);-1/hy(1)];    % and (A,C)(B',D') for horizontal
                 Svec(topS+9+12:topS+9+23,2)=fun2No.edge(3,[adjEdge(1:6,1);adjEdge(1:6,2)])'; % m=3
-                Svec(topS+9+12:topS+9+23,3)=[-1/hx(1);sum(1./hx);-1/hx(2);-1/hx(1);sum(1./hx);-1/hx(2);    -hx([1;1;1])/15      ;    hx([2;2;2])/15       ]...   % (A',C')(B,D) for vertical edge
-                                          .*[     hy([2;2;2])/15      ;   -hy([1;1;1])/15       ;-1/hy(2);sum(1./hy);-1/hy(1);-1/hy(2);sum(1./hy);-1/hy(1)];     % and (A,C)(B',D') for horizontal
+                Svec(topS+9+12:topS+9+23,3)=[-1/hx(1);sum(1./hx);-1/hx(2);-1/hx(1);sum(1./hx);-1/hx(2);    -hx([1;1;1])/30      ;    hx([2;2;2])/30       ]...   % (A',C')(B,D) for vertical edge
+                                          .*[     hy([2;2;2])/30      ;   -hy([1;1;1])/30       ;-1/hy(2);sum(1./hy);-1/hy(1);-1/hy(2);sum(1./hy);-1/hy(1)];     % and (A,C)(B',D') for horizontal
                 topS=topS+Nline;
                 % =========== construct Cx matrix ==============
                 Nline=6+14+8;
@@ -220,14 +220,14 @@ function [ No2fun, fun2No, Nbasis, hxList, hyList, xList, yList, edgeDir, Svec, 
                 % overlap with 12 adjacent edge basis group
                 Cxvec(topCx+6:topCx+6+9,2)=fun2No.edge(2,[adjEdge([1;3;4;6],1);adjEdge(1:6,2)])';  % m=2
                 Cxvec(topCx+6:topCx+6+9,3)=[   [-1;1;-1;1]/2 ;                  [1;1;1;-1;-1;-1]/3 ]...               % (A,C')
-                                         .*[ -hy([2;2;1;1])/3; hy(2)/6;sum(hy)/3;hy(1)/6;hy(2)/6;sum(hy)/3;hy(1)/6 ]; % (B,D)
+                                         .*[ -hy([2;2;1;1])/6; hy(2)/6;sum(hy)/3;hy(1)/6;hy(2)/6;sum(hy)/3;hy(1)/6 ]; % (B,D)
                 Cxvec(topCx+6+10:topCx+6+13,2)=fun2No.edge(3,adjEdge([1;3;4;6],1))'; % m=3
                 Cxvec(topCx+6+10:topCx+6+13,3)=[   [-1;1;-1;1]/2                  ]...  % (A,C')
-                                             .*[ hy([2;2;1;1])/15.*[1;1;-1;-1]    ];    % (B,D)
+                                             .*[ hy([2;2;1;1])/30.*[1;1;-1;-1]    ];    % (B,D)
                 % overlap with 4 adjacent face basis group
                 Cxvec(topCx+6+14:topCx+6+14+7,2)=[reshape(fun2No.face(2,2,adjFace(1:4)),4,1);reshape(fun2No.face(2,3,adjFace(1:4)),4,1)];
                 Cxvec(topCx+6+14:topCx+6+14+7,3)=[   [-1;1;1;-1]/3;   [-1;1;1;-1]/3              ]...  % (A,C')
-                                               .*[-hy([2;2;1;1])/3;hy([2;2;1;1])/15.*[1;1;-1;-1] ];    % (B,D)
+                                               .*[-hy([2;2;1;1])/6;hy([2;2;1;1])/30.*[1;1;-1;-1] ];    % (B,D)
                 topCx=topCx+Nline;
                 % ============= construct Cy matrix ===============
                 Nline=6+14+8;
@@ -238,14 +238,14 @@ function [ No2fun, fun2No, Nbasis, hxList, hyList, xList, yList, edgeDir, Svec, 
                                      .*[ [1;1;-1;-1     ;1           ;-1]/2  ];        % (B,D')
                 % overlap with 12 adjacent edge basis group
                 Cyvec(topCy+6:topCy+6+9,2)=fun2No.edge(2,[adjEdge([1;3;4;6],2);adjEdge(1:6,1)])';  % m=2
-                Cyvec(topCy+6:topCy+6+9,3)=[ -hx([1;1;2;2])/3; hx(1)/6;sum(hx)/3;hx(2)/6;hx(1)/6;sum(hx)/3;hx(2)/6]...  % (A,C)
+                Cyvec(topCy+6:topCy+6+9,3)=[ -hx([1;1;2;2])/6; hx(1)/6;sum(hx)/3;hx(2)/6;hx(1)/6;sum(hx)/3;hx(2)/6]...  % (A,C)
                                          .*[   [1;-1;1;-1]/2 ;                  [-1;-1;-1;1;1;1]/3  ];                  % (B,D')
                 Cyvec(topCy+6+10:topCy+6+13,2)=fun2No.edge(3,adjEdge([1;3;4;6],2))'; % m=3
-                Cyvec(topCy+6+10:topCy+6+13,3)=[ hx([1;1;2;2])/15.*[-1;-1;1;1]  ]...  % (A,C)
+                Cyvec(topCy+6+10:topCy+6+13,3)=[ hx([1;1;2;2])/30.*[-1;-1;1;1]  ]...  % (A,C)
                                              .*[ [1;-1;1;-1]/2    ];                  % (B,D')
                 % overlap with 4 adjacent face basis group
                 Cyvec(topCy+6+14:topCy+6+14+7,2)=[reshape(fun2No.face(2,2,adjFace(1:4)),4,1);reshape(fun2No.face(3,2,adjFace(1:4)),4,1)];
-                Cyvec(topCy+6+14:topCy+6+14+7,3)=[-hx([2;1;1;2])/3;hx([2;1;1;2])/15.*[1;-1;-1;1]  ]...  % (A,C)
+                Cyvec(topCy+6+14:topCy+6+14+7,3)=[-hx([2;1;1;2])/6;hx([2;1;1;2])/30.*[1;-1;-1;1]  ]...  % (A,C)
                                                .*[   [-1;-1;1;1]/3;   [-1;-1;1;1]/3               ];    % (B,D')
                 topCy=topCy+Nline;
             case 'e'
@@ -426,25 +426,25 @@ function result=phiphi(l,m,pos,h)
     result=0;
     if l>1 && m>1
         if m==l
-            result=2*h(1)*(1/(2*l+1)+1/(2*l-3))/(2*l-1)/(2*l-1);
+            result=h(1)*(1/(2*l+1)+1/(2*l-3))/(2*l-1)/(2*l-1);
         elseif m==l+2
-            result=-2*h(1)/(2*l-1)/(2*l+3)/(2*l+1);
+            result=-h(1)/(2*l-1)/(2*l+3)/(2*l+1);
         elseif m==l-2
-            result=-2*h(1)/(2*l-1)/(2*l-5)/(2*l-3);
+            result=-h(1)/(2*l-1)/(2*l-5)/(2*l-3);
         end
     elseif l==1 && m==1
         result=sum(h)/3/(1+abs(pos));
     elseif l==1 && m<4
         if m==2
-            result=-h(1)/3;
+            result=-h(1)/6;
         elseif m==3
-            result=h(1)/15*(2*pos+1);
+            result=h(1)/30*(2*pos+1);
         end
     elseif l<4 && m==1
         if l==2
-            result=-h(1)/3;
+            result=-h(1)/6;
         elseif l==3
-            result=-h(1)/15*(2*pos-1);
+            result=-h(1)/30*(2*pos-1);
         end
     end
 end
@@ -474,7 +474,7 @@ function result=dphidphi(l,m,pos,h)
     result=0;
     if l>1 && m>1
         if m==l
-            result=2/h(1)/(2*l-1);
+            result=4/h(1)/(2*l-1);
         end
     elseif l==1 && m==1
         if pos==0

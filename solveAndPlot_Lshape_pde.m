@@ -1,17 +1,22 @@
 % Finite Element Method Solver
 
 %% parameters
+b=[1;-0.5];
+c=1;
+epsilon=1e-1;
+f=@(x,y)1;
+
 % shishkin type mesh
-nPerAxis=2^10;
+nPerAxis=2^7;
 n={[nPerAxis/4;nPerAxis/4];[nPerAxis/4;nPerAxis/4];[nPerAxis/4;nPerAxis/4];[nPerAxis/4;nPerAxis/4]};
-w={[0.98];[0.02];[0.98];[0.02]};
+w={[0.9];[0.1];[0.9];[0.1]};
 % uniform mesh
-% nPerAxis=2^12;
+% nPerAxis=2^8;
 % n={[nPerAxis/2];[nPerAxis/2];[nPerAxis/2];[nPerAxis/2]};
 % w={[];[];[];[]};
 
 meshType='LshapeSegUniform';
-basis='Linear';
+basis='BiLinear';
 
 
 %% numerical solution    
@@ -21,16 +26,16 @@ basis='Linear';
 tic;
 mesh0=makeMesh(meshType,n,w);
 disp(['Time to makeMesh: ',num2str(toc)]);tic;
-[S,~,~,~,vecf,id2fun,fun2id]=getCoeffs2D(mesh0,basis,1);
+[S,Cx,Cy,M,vecf,id2fun,fun2id]=getCoeffs2D(mesh0,basis,f);
 disp(['Time to getCoeffs: ',num2str(toc)]);tic;
 
 % solve
-u=S\vecf;
+H=epsilon*S+b(1)*Cx+b(2)*Cy+c*M;
+u=H\vecf;
 disp(['Time to solve linear system: ',num2str(toc)]);tic;
 % save;
 
 %% interpolant
-eigenState=1;
 % get node coordinates
 N=mesh0.Nnodes;
 xList=mesh0.nodes.x;yList=mesh0.nodes.y;
@@ -47,7 +52,7 @@ numSol=scatteredInterpolant(tmp_x,tmp_y,tmp_u);
 disp(['Time to interpolant: ',num2str(toc)]);
 
 %% plot
-plotSol=@(x,y)numSol_uniform_standard(x,y);
+plotSol=@(x,y)numSol(x,y);
 figure();
 nx=200;ny=200;
 [x,y]=meshgrid( linspace(-1,1,nx) , linspace(-1,1,ny) );
@@ -64,7 +69,7 @@ colormap(gca,'jet');
 W=1;set(gca,'xlim',[-W,W],'ylim',[-W,W]);
 
 % refine plot
-title([num2str(eigenState),'th eigen state.  Eigen Value=',num2str(D(eigenState,eigenState))]);
+title(['nPerAxis=',num2str(nPerAxis)]);
 xlabel('$$x$$','interpreter','latex');
 ylabel('$$y$$','interpreter','latex');
 % set(ax(1),'fontsize',12,'ylim',[0,1],'Ycolor','black');

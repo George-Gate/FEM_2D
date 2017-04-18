@@ -1,15 +1,18 @@
 % Finite Element Method Solver
 
 %% parameters
-b=[1;0];
-c=100;
-k=1;
-f=@(x,y)x.^2+1;
-epsilon=1e-5;
-n={[2^9+1];[2^8]};
-w={[];[]};
+b=[1;-0.5];
+c=1;
+% f=@(x,y)x.^2+y+1;
+f=1;
+epsilon=1e-3;
+
+n={[2^6;2^6];[2^6;2^6]};
+tau(1)=min(0.5,epsilon./abs(b(1))*2.5*log(n{1}(1)+1));
+tau(2)=min(0.5,epsilon./abs(b(2))*2.5*log(n{2}(1)+1));
+w={[1-tau(1)];[tau(2)]};
 meshType='boxSegUniform';
-basis='Linear';
+basis='BiLinear';
 
 
 %% numerical solution    
@@ -46,8 +49,19 @@ numSol=scatteredInterpolant(tmp_x,tmp_y,tmp_u);
 
 %% plot
 figure();
-nx=200;ny=200;
-[x,y]=meshgrid( linspace(min(xList),max(xList),nx) , linspace(min(yList),max(yList),ny) );
+nxy=[200;200];
+coList=cell(2,1);
+for i=1:2
+    coList{i}=0;
+    len=length(w{i});
+    for j=1:len
+        tmp=linspace(coList{i}(end),coList{i}(end)+w{i}(j),nxy(i)+1)';
+        coList{i}=[coList{i};tmp(2:end)];
+    end
+    tmp=linspace(coList{i}(end),1,nxy(i)+1)';
+    coList{i}=[coList{i};tmp(2:end)];
+end
+[x,y]=meshgrid( coList{1} , coList{2} );
 % contour(x,y,imag(numSol(x,y)));hold on;
 mesh(x,y,(numSol(x,y)));hold on;
 

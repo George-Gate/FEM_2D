@@ -5,13 +5,8 @@ b=[1;-0.5];
 c=1;
 epsilon=1e-1;
 f=@(x,y)x.^2+y+1;
-fUb=[2,1];
+fUb=[2,1];     % the order of f corresponding to x and y
 
-
-% n={2;2};
-% w={[];[]};
-% K=40;
-% meshType='boxSegUniform';
 
 % shishkin type mesh
 nPerAxis=4;
@@ -62,12 +57,3 @@ xlabel('$$x$$','interpreter','latex');
 ylabel('$$y$$','interpreter','latex');
 % set('fontsize',12);
 
-%% plot diff
-figure();
-axis;hold on;
-for i=1:mesh0.Nsurfaces
-    x=xSample*mesh0.surfaces.hx(i)+mesh0.surfaces.x(1,i);
-    y=ySample*mesh0.surfaces.hy(i)+mesh0.surfaces.y(1,i);
-    surf(x,y,numSol{i}-numSol_bilinear(x,y),'lineStyle','none');
-end
-title('Error');
